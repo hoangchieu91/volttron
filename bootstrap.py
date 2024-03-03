@@ -86,7 +86,7 @@ _log = logging.getLogger(__name__)
 
 _WINDOWS = sys.platform.startswith('win')
 default_rmq_dir = os.path.join(os.path.expanduser("~"), "rabbitmq_server")
-rmq_version = "3.9.7"
+rmq_version = "3.9.29"
 rabbitmq_server = f"rabbitmq_server-{rmq_version}"
 
 
@@ -242,7 +242,7 @@ def main(argv=sys.argv):
 
     # Python3 for life!
     if sys.version_info.major < 3 or sys.version_info.minor < 6:
-        sys.stderr.write('error: Python >= 3.6 is required\n')
+        sys.stderr.write('error: Python >= 3.8 is required\n')
         sys.exit(1)
 
     # Build the parser

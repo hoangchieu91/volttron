@@ -87,7 +87,7 @@ def publish_agent(request, volttron_instance):
     assert process.returncode == 0
 
     # Add platform driver configuration files to config store.
-    cmd = ['volttron-ctl', 'config', 'store',PLATFORM_DRIVER,
+    cmd = ['volttron-ctl', 'config', 'store', PLATFORM_DRIVER,
            'fake.csv', 'fake_unit_testing.csv', '--csv']
     process = Popen(cmd, env=volttron_instance.env,
                     cwd='scripts/scalability-testing',
@@ -157,7 +157,7 @@ def test_thing(publish_agent):
     assert value == 10.0
 
     publish_agent.vip.rpc.call(CONFIGURATION_STORE,
-                               "manage_store",
+                               "set_config",
                                "config_actuation",
                                "fakedriver",
                                jsonapi.dumps({"SampleWritableFloat1": 42.0}),

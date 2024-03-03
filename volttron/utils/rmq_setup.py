@@ -59,7 +59,7 @@ from volttron.platform.auth import certs
 from volttron.platform import get_home
 from volttron.platform.agent.utils import (store_message_bus_config,
                                            execute_command)
-from volttron.utils.prompt import prompt_response, y, n, y_or_n
+from volttron.utils.prompt import prompt_response, y, y_or_n
 from volttron.platform import jsonapi
 from urllib.parse import urlparse
 from volttron.platform.agent.utils import get_platform_instance_name, get_fq_identity
@@ -90,13 +90,13 @@ def _start_rabbitmq_without_ssl(rmq_config, conf_file, env=None):
     rmq_home = rmq_config.rmq_home
     if not rmq_home:
         rmq_home = os.path.join(os.path.expanduser("~"),
-                                "rabbitmq_server/rabbitmq_server-3.9.7")
+                                "rabbitmq_server/rabbitmq_server-3.9.29")
         if os.path.exists(rmq_home):
             os.environ['RABBITMQ_HOME'] = rmq_home
         else:
             _log.error("\nMissing key 'rmq_home' in RabbitMQ config and RabbitMQ is "
                        "not installed in default path: \n"
-                       "~/rabbitmq_server/rabbitmq_server-3.9.7 \n"
+                       "~/rabbitmq_server/rabbitmq_server-3.9.29 \n"
                        "Please set the correct RabbitMQ installation path in "
                        "rabbitmq_config.yml")
             exit(1)
@@ -1543,7 +1543,7 @@ def start_rabbit(rmq_home, env=None):
             execute_command(status_cmd, env=env)
             if not start:
                 # if we have attempted started already
-                gevent.sleep(1)  # give a second just to be sure
+                gevent.sleep(2)  # give couple of seconds just to be sure
             started = True
             _log.info("Rmq server at {} is running at ".format(rmq_home))
         except RuntimeError as e:

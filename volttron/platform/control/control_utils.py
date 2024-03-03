@@ -36,11 +36,11 @@
 # under Contract DE-AC05-76RL01830
 # }}}
 import collections
-import os
 import sys
 import re
 from volttron.platform import jsonapi
 from volttron.platform.agent.utils import is_secure_mode
+import os
 
 _stdout = sys.stdout
 _stderr = sys.stderr

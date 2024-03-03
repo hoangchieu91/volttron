@@ -42,12 +42,11 @@ import pytest
 import gevent
 import pytz
 import os
-import json
 from pytest import approx
 from datetime import datetime, timedelta
 from dateutil import parser
 
-from volttron.platform import get_services_core, jsonapi
+from volttron.platform import jsonapi
 from volttron.platform.agent.utils import format_timestamp, parse_timestamp_string, get_aware_utc_now
 from volttron.platform.messaging import headers as headers_mod
 
@@ -1333,7 +1332,7 @@ def test_update_config_store(volttron_instance, influxdb_client):
         publish_some_fake_data(publisher, 5)
 
         # Update config store
-        publisher.vip.rpc.call('config.store', 'manage_store', 'influxdb.historian', 'config',
+        publisher.vip.rpc.call('config.store', 'set_config', 'influxdb.historian', 'config',
                                jsonapi.dumps(updated_influxdb_config), config_type="json").get(timeout=10)
         publish_some_fake_data(publisher, 5)
 

@@ -54,7 +54,7 @@ from volttron.platform.agent.base_historian import (BaseHistorian,
                                                     STATUS_KEY_TIME_ERROR)
 from volttron.platform.agent import utils
 from volttron.platform.messaging import headers as headers_mod
-from volttron.platform.messaging.health import *
+from volttron.platform.messaging.health import STATUS_BAD, STATUS_GOOD, Status
 from volttron.platform.messaging import topics
 from volttron.platform.agent.known_identities import CONFIGURATION_STORE
 
@@ -388,7 +388,7 @@ def test_time_tolerance_check(request, volttron_instance, client_agent):
         # Change config to modify topic for time tolerance check
         historian.publish_sleep = 0
         json_config = """{"time_tolerance_topics":["record"]}"""
-        historian.vip.rpc.call(CONFIGURATION_STORE, 'manage_store',
+        historian.vip.rpc.call(CONFIGURATION_STORE, 'set_config',
                                identity, "config", json_config, config_type="json").get()
         gevent.sleep(2)
 

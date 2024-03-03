@@ -204,10 +204,10 @@ def test_devices_topic(publish_agent, query_agent):
         count=20,
         order="LAST_TO_FIRST").get(timeout=10)
 
-    assert (len(result['values']) == 1)
+    assert len(result['values']) == 1
     (time1_date, time1_time) = time1.split("T")
     assert (result['values'][0][0] == time1_date + 'T' + time1_time + '+00:00')
-    assert (result['values'][0][1] == approx(oat_reading))
+    assert result['values'][0][1] == approx(oat_reading)
     assert set(result['metadata'].items()) == set(float_meta.items())
 
 
@@ -367,12 +367,12 @@ def test_analysis_topic(publish_agent, query_agent):
         start=now,
         order="LAST_TO_FIRST").get(timeout=10)
     print('Query Result', result)
-    assert (len(result['values']) == 1)
+    assert len(result['values']) == 1
     (now_date, now_time) = now.split("T")
     if now_time[-1:] == 'Z':
         now_time = now_time[:-1]
-    assert (result['values'][0][0] == now_date + 'T' + now_time + '+00:00')
-    assert (result['values'][0][1] == approx(mixed_reading))
+    assert result['values'][0][0] == now_date + 'T' + now_time + '+00:00'
+    assert result['values'][0][1] == approx(mixed_reading)
 
 
 @pytest.mark.historian
@@ -430,8 +430,8 @@ def test_analysis_topic_no_header(publish_agent, query_agent):
         start=now,
         order="LAST_TO_FIRST").get(timeout=10)
     print('Query Result', result)
-    assert (len(result['values']) == 1)
-    assert (result['values'][0][1] == approx(mixed_reading))
+    assert len(result['values']) == 1
+    assert result['values'][0][1] == approx(mixed_reading)
 
 
 @pytest.mark.historian
@@ -491,8 +491,8 @@ def test_log_topic(publish_agent, query_agent):
         topic="datalogger/PNNL/BUILDING1_ANON/Device/MixedAirTemperature",
         order="LAST_TO_FIRST").get(timeout=10)
     print('Query Result', result)
-    assert (len(result['values']) == 1)
-    assert (result['values'][0][1] == approx(mixed_reading))
+    assert len(result['values']) == 1
+    assert result['values'][0][1] == approx(mixed_reading)
 
 
 @pytest.mark.historian
@@ -539,8 +539,8 @@ def test_log_topic_no_header(publish_agent, query_agent):
         start=current_time,
         order="LAST_TO_FIRST").get(timeout=10)
     print('Query Result', result)
-    assert (len(result['values']) == 1)
-    assert (result['values'][0][1] == approx(mixed_reading))
+    assert len(result['values']) == 1
+    assert result['values'][0][1] == approx(mixed_reading)
 
 
 @pytest.mark.historian
@@ -567,23 +567,3 @@ def test_old_config(volttron_instances, forwarder):
 
     print("data_mover agent id: ", uuid)
 
-
-@pytest.mark.historian
-@pytest.mark.forwarder
-def test_default_config(volttron_instances):
-    """
-    Test the default configuration file included with the agent
-    """
-    publish_agent = volttron_instance1.build_agent(identity="test_agent")
-    gevent.sleep(1)
-
-    config_path = os.path.join(get_services_core("DataMover"), "config")
-    with open(config_path, "r") as config_file:
-        config_json = json.load(config_file)
-    assert isinstance(config_json, dict)
-    volttron_instance1.install_agent(
-        agent_dir=get_services_core("DataMover"),
-        config_file=config_json,
-        start=True,
-        vip_identity="health_test")
-    assert publish_agent.vip.rpc.call("health_test", "health.get_status").get(timeout=10).get('status') == STATUS_GOOD

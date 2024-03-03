@@ -197,11 +197,10 @@ class CSVRegister:
                 return table_map[table]
             except KeyError:
                 raise Exception("Invalid modbus table '{0}' for register '{1}'".format(table, self._name))
+        elif self._datatype == helpers.BOOL:
+            return helpers.COIL_READ_WRITE if self._writable else helpers.COIL_READ_ONLY
         else:
-            if self._datatype == helpers.BOOL:
-                return helpers.COIL_READ_WRITE if self._writable else helpers.COIL_READ_ONLY
-            else:
-                return helpers.REGISTER_READ_WRITE if self._writable else helpers.REGISTER_READ_ONLY
+            return helpers.REGISTER_READ_WRITE if self._writable else helpers.REGISTER_READ_ONLY
 
     @property
     def _op_mode(self):
@@ -330,7 +329,7 @@ class Catalog(Mapping):
                 yaml_path = os.path.dirname(__file__) + '/' + yaml_path
 
             with open(yaml_path, 'rb') as yaml_file:
-                for map in yaml.load(yaml_file):
+                for map in yaml.safe_load(yaml_file):
                     map = dict((k.lower(), v) for k, v in map.items())
                     Catalog._data[map['name']] = Map(file=map.get('file', ''),
                                                      map_dir=os.path.dirname(__file__),
